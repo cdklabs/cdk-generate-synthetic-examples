@@ -30,6 +30,8 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+*.js
+*.d.ts
 !/.projenrc.js
 /test-reports/
 junit.xml
@@ -43,8 +45,9 @@ junit.xml
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
-!/src/
-/lib
+!/lib/
+/lib/**/*.js
+/lib/**/*.d.ts
 /dist/
 !/.eslintrc.json
 !/.github/workflows/upgrade-main.yml
