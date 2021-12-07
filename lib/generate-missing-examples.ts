@@ -148,7 +148,7 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
 async function statFile(fileName: string) {
   try {
     return await fs.stat(fileName);
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') { return undefined; }
     throw e;
   }
