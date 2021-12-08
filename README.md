@@ -8,7 +8,16 @@ all classes get something usable (which otherwise would not have any
 examples at all). It is designed to run during the build of a CDK Construct
 Library.
 
-### Example
+### Install
+
+This tool is published as an npm module, so it can be either installed locally or
+globally via:
+
+```bash
+npm i -g cdk-generate-synthetic-examples
+```
+
+### Usage
 
 Suppose you are in the base directory of your CDK construct, `aws-construct`.
 After a successful build, you have a `.jsii` file. `generate-examples` will
