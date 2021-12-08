@@ -1,4 +1,4 @@
-## Generate Synthetic Examples
+## CDK Generate Synthetic Examples
 
 This tool will find all classes in the JSII assembly that don't yet have
 any example code associated with them, and will generate a synthetic
@@ -16,7 +16,7 @@ generate examples for types without doc examples and directly modify the
 assembly.
 
 ```bash
-~/path/to/generate-synthetic-examples/bin/generate-examples
+npx cdk-generate-synthetic-examples
 ```
 
 ### Important Flags
@@ -24,13 +24,13 @@ assembly.
 Use `append-to` to save translations to an existing tablet file.
 
 ```bash
-generate-examples .jsii append-to samples.tabl.json
+npx cdk-generate-synthetic-examples .jsii --append-to samples.tabl.json
 ```
 
 Use `cache-from` to resuse translations from the given tablet file.
 
 ```bash
-generate-examples .jsii cache-from cache.tabl.json
+npx cdk-generate-synthetic-examples .jsii --cache-from cache.tabl.json
 ```
 
 ## Security
