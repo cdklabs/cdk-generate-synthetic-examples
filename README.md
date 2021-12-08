@@ -1,11 +1,46 @@
-## My Project
+## CDK Generate Synthetic Examples
 
-TODO: Fill this README out!
+This tool will find all classes in the JSII assembly that don't yet have
+any example code associated with them, and will generate a synthetic
+example that shows how to instantiate the type. This is a method of last
+resort: we'd obviously prefer hand-written examples, but this will make sure
+all classes get something usable (which otherwise would not have any
+examples at all). It is designed to run during the build of a CDK Construct
+Library.
 
-Be sure to:
+### Install
 
-* Change the title in this README
-* Edit your repository description on GitHub
+This tool is published as an npm module, so it can be either installed locally or
+globally via:
+
+```bash
+npm i -g cdk-generate-synthetic-examples
+```
+
+### Usage
+
+Suppose you are in the base directory of your CDK construct, `aws-construct`.
+After a successful build, you have a `.jsii` file. `generate-examples` will
+generate examples for types without doc examples and directly modify the
+assembly.
+
+```bash
+npx cdk-generate-synthetic-examples
+```
+
+### Important Flags
+
+Use `append-to` to save translations to an existing tablet file.
+
+```bash
+npx cdk-generate-synthetic-examples .jsii --append-to samples.tabl.json
+```
+
+Use `cache-from` to resuse translations from the given tablet file.
+
+```bash
+npx cdk-generate-synthetic-examples .jsii --cache-from cache.tabl.json
+```
 
 ## Security
 
