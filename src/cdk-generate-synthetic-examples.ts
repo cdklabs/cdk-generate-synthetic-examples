@@ -1,9 +1,9 @@
 import * as yargs from 'yargs';
 
-import { generateMissingExamples } from '../lib/generate-missing-examples';
+import { generateMissingExamples } from './generate-missing-examples';
 
 async function main() {
-  const args = yargs
+  const args = await yargs
     .usage('$0 [ASSEMBLY..]')
     .option('cache-from', {
       alias: 'C',

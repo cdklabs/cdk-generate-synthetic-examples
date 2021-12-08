@@ -8,6 +8,7 @@ junit.xml
 /.mergify.yml
 /test/
 /tsconfig.dev.json
+/src/
 !/lib/
 !/lib/**/*.js
 !/lib/**/*.d.ts

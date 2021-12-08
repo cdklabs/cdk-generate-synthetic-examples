@@ -6,7 +6,7 @@
     "url": "https://github.com/cdklabs/cdk-generate-synthetic-examples"
   },
   "bin": {
-    "generate-examples": "bin/generate-examples"
+    "cdk-generate-synthetic-examples": "bin/cdk-generate-synthetic-examples"
   },
   "scripts": {
     "build": "npx projen build",

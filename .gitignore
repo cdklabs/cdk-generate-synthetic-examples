@@ -45,9 +45,8 @@ junit.xml
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
-!/lib/
-/lib/**/*.js
-/lib/**/*.d.ts
+!/src/
+/lib
 /dist/
 !/.eslintrc.json
 !/.github/workflows/upgrade-main.yml

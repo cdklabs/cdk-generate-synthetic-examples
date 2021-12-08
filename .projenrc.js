@@ -3,7 +3,6 @@ const { typescript } = require('projen');
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: 'main',
   name: 'cdk-generate-synthetic-examples',
-  srcdir: 'lib',
   repository: 'https://github.com/cdklabs/cdk-generate-synthetic-examples',
   authorEmail: 'aws-cdk-dev@amazon.com',
   authorName: 'Amazon Web Servies',

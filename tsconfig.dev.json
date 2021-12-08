@@ -26,7 +26,7 @@
   },
   "include": [
     ".projenrc.js",
-    "lib/**/*.ts",
+    "src/**/*.ts",
     "test/**/*.ts"
   ],
   "exclude": [
