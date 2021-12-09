@@ -33,7 +33,7 @@ async function main() {
       default: false,
     })
     .help()
-    .strict()
+    .strictOptions()
     .showHelpOnFail(false)
     .argv;
 
