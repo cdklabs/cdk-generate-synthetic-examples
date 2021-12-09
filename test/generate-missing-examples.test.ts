@@ -29,11 +29,10 @@ test('test end-to-end and translation to Python', async () => {
   try {
     const outputTablet = path.join(assembly.directory, 'test.tbl.json');
 
-    await generateMissingExamples([
-      assembly.directory,
-    ], {
-      directory: assembly.directory,
-      appendToTablet: outputTablet,
+    await generateMissingExamples([assembly.directory], {
+      extractOptions: {
+        cache: outputTablet,
+      },
     });
 
     const tablet = await LanguageTablet.fromFile(outputTablet);
@@ -43,7 +42,6 @@ test('test end-to-end and translation to Python', async () => {
       .map((snip) => snip.get(TargetLanguage.PYTHON)?.source);
 
     const classInstantiation = pythons.find((s) => s?.includes('= my_assembly.MyClass('));
-
     expect(classInstantiation).toEqual([
       '# The code below shows an example of how to instantiate this type.',
       '# The values are placeholders you should change.',

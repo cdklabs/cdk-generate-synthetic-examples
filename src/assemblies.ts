@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as spec from '@jsii/spec';
 import * as fs from 'fs-extra';
-import { TypeScriptSnippet } from 'jsii-rosetta';
 import { FIXTURE_NAME } from './generate-missing-examples';
 
 /**
@@ -44,12 +43,12 @@ function _fingerprint(assembly: spec.Assembly): spec.Assembly {
 /**
  * Insert an example into the docs of a type
  */
-export function insertExample(example: TypeScriptSnippet, type: spec.Type): void {
+export function insertExample(visibleSource: string, type: spec.Type): void {
   if (type.docs) {
-    type.docs.example = example.visibleSource;
+    type.docs.example = visibleSource;
   } else {
     type.docs = {
-      example: example.visibleSource,
+      example: visibleSource,
     };
   }
   if (type.docs.custom) {

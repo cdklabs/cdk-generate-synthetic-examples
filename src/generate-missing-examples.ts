@@ -2,8 +2,7 @@
 import { promises as fs } from 'fs';
 import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
 
-// This import should come from @jsii/spec. Replace when that is possible.
-import { LanguageTablet, RosettaTranslator, SnippetLocation, SnippetParameters, TypeScriptSnippet, typeScriptSnippetFromCompleteSource } from 'jsii-rosetta';
+import { extractSnippets } from 'jsii-rosetta/lib/commands/extract';
 import { insertExample, replaceAssembly, addFixtureToRosetta } from './assemblies';
 import { generateAssignmentStatement } from './generate';
 
@@ -14,11 +13,13 @@ const COMMENT_WARNING = [
 
 export const FIXTURE_NAME = '_generated';
 
-export interface GenerateExamplesOptions {
-  readonly cacheFromTablet?: string;
-  readonly appendToTablet?: string;
+export interface ExtractOptions {
+  readonly cache?: string;
   readonly directory?: string;
-  readonly strict?: boolean;
+}
+
+export interface GenerateExamplesOptions {
+  readonly extractOptions?: ExtractOptions;
 }
 
 export async function generateMissingExamples(assemblyLocations: string[], options: GenerateExamplesOptions) {
@@ -33,7 +34,7 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
     return { assemblyLocation, assembly: await typesystem.load(assemblyLocation, { validate: false }) };
   }));
 
-  const snippets = loadedAssemblies.flatMap(({ assembly, assemblyLocation }) => {
+  loadedAssemblies.flatMap(({ assembly, assemblyLocation }) => {
     // Classes and structs
     const documentableTypes: Array<ClassType | InterfaceType> = [];
     for (const m of [assembly, ...assembly.allSubmodules]) {
@@ -53,6 +54,7 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
     if (documentableTypes.length === 0) { return []; }
 
     const failed = new Array<string>();
+    // no flatmap
     const generatedSnippets = documentableTypes.flatMap((classType) => {
       const example = generateAssignmentStatement(classType);
       if (!example) {
@@ -60,34 +62,14 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
         return [];
       }
 
-      // To successfully compile, we need to generate the right 'Construct' import
-      const completeSource = [
+      const visibleSource = [
         ...COMMENT_WARNING,
         ...example.renderDeclarations(),
-        '',
-        '/// !hide',
-        correctConstructImport(assembly),
-        'class MyConstruct extends Construct {',
-        'constructor(scope: Construct, id: string) {',
-        'super(scope, id);',
-        '/// !show',
         example.renderCode(),
-        '/// !hide',
-        '} }',
       ].join('\n').trimLeft();
-      const location: SnippetLocation = { api: { api: 'type', fqn: classType.fqn }, field: { field: 'example' } };
 
-      const tsSnippet: TypeScriptSnippet = typeScriptSnippetFromCompleteSource(
-        completeSource,
-        location,
-        true,
-        {
-          [SnippetParameters.$COMPILATION_DIRECTORY]: options.directory ?? process.cwd(),
-          [SnippetParameters.$PROJECT_DIRECTORY]: assemblyLocation,
-        });
-
-      insertExample(tsSnippet, classType.spec);
-      return [tsSnippet];
+      insertExample(visibleSource, classType.spec);
+      return [visibleSource];
     });
 
     console.log([
@@ -98,51 +80,23 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
     return generatedSnippets;
   });
 
-  const rosetta = new RosettaTranslator({
-    includeCompilerDiagnostics: true,
-    assemblies: loadedAssemblies.map(({ assembly }) => assembly.spec),
-  });
-
-  if (options.cacheFromTablet) {
-    await rosetta.loadCache(options.cacheFromTablet);
-  }
-
-  // Will mutate the 'snippets' array
-  const { remaining } = rosetta.readFromCache(snippets);
-
-  console.log(`Translating ${remaining.length} snippets`);
-  const results = await rosetta.translateAll(remaining);
-  if (results.diagnostics.length > 0) {
-    for (const diag of results.diagnostics) {
-      console.log(diag.formattedMessage);
-    }
-
-    if (options.strict) {
-      process.exitCode = 1;
-    }
-  }
-
-  // Copy everything from the rosetta tablet into our output tablet
-  if (options.appendToTablet) {
-    console.log(`Appending to ${options.appendToTablet}`);
-    const outputTablet = new LanguageTablet();
-    if ((await statFile(options.appendToTablet)) !== undefined) {
-      await outputTablet.load(options.appendToTablet);
-    }
-
-    for (const key of rosetta.tablet.snippetKeys) {
-      const snip = rosetta.tablet.tryGetSnippet(key);
-      if (snip) {
-        outputTablet.addSnippet(snip);
-      }
-    }
-
-    await outputTablet.save(options.appendToTablet);
-  }
-
   console.log(`Saving ${loadedAssemblies.length} assemblies`);
   await Promise.all((loadedAssemblies).map(({ assembly, assemblyLocation }) =>
     replaceAssembly(assembly.spec, assemblyLocation)));
+
+  // extract snippets if extract flag is set.
+  if (options.extractOptions) {
+    if (options.extractOptions.directory) {
+      process.chdir(options.extractOptions.directory);
+    }
+
+    console.log(`Extracting snippets from ${assemblyLocations.length} assemblies`);
+    await extractSnippets(assemblyLocations, {
+      cacheFromFile: options.extractOptions.cache,
+      cacheToFile: options.extractOptions.cache,
+      includeCompilerDiagnostics: true,
+    });
+  }
 }
 
 async function statFile(fileName: string) {
