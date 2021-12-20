@@ -54,7 +54,6 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
     if (documentableTypes.length === 0) { return []; }
 
     const failed = new Array<string>();
-    // no flatmap
     const generatedSnippets = documentableTypes.flatMap((classType) => {
       const example = generateAssignmentStatement(classType);
       if (!example) {
