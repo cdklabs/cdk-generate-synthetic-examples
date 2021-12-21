@@ -46,7 +46,7 @@ export function generateAssignmentStatement(type: reflect.ClassType | reflect.In
     const expression = exampleValueForClass(context, type, 0);
     if (!expression) { return undefined; }
     return Code.concatAll(
-      `const ${lowercaseFirstLetter(type.name)} = `,
+      `const ${escapeIdentifier(lowercaseFirstLetter(type.name))} = `,
       expression,
       ';',
     );
@@ -57,7 +57,7 @@ export function generateAssignmentStatement(type: reflect.ClassType | reflect.In
     if (!expression) { return undefined; }
 
     return Code.concatAll(
-      `const ${lowercaseFirstLetter(type.name)}: `,
+      `const ${escapeIdentifier(lowercaseFirstLetter(type.name))}: `,
       typeReference(type),
       ' = ',
       expression,
