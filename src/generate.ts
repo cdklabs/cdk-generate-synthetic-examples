@@ -204,7 +204,8 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
       case spec.PrimitiveType.Date:
         return new Code('new Date()');
       default:
-        return new Code(name, [new AnyAssumption(name)]);
+        const defaultName = escapeIdentifier(name);
+        return new Code(defaultName, [new AnyAssumption(defaultName)]);
     }
   }
 
