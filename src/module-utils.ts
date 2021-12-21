@@ -65,7 +65,7 @@ export function typeNamespacedName(type: reflect.Type): string {
   ].join('.');
 }
 
-const KEYWORDS = ['function', 'default'];
+const KEYWORDS = ['function', 'default', 'arguments', 'enum'];
 
 export function escapeIdentifier(ident: string): string {
   return KEYWORDS.includes(ident) ? `${ident}_` : ident;

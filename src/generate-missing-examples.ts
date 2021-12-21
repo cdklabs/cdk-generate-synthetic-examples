@@ -112,7 +112,8 @@ function correctConstructImport(assembly: Assembly) {
     return 'import { Construct } from "monocdk";';
   }
 
-  if (assembly.dependencies.some(d => d.assembly.name === '@aws-cdk/core')) {
+  if (assembly.name === '@aws-cdk/core' ||
+    assembly.dependencies.some(d => d.assembly.name === '@aws-cdk/core')) {
     return 'import { Construct } from "@aws-cdk/core";';
   }
 

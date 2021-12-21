@@ -1,6 +1,6 @@
 import * as reflect from 'jsii-reflect';
 
-import { module, typeNamespacedName } from './module-utils';
+import { escapeIdentifier, module, typeNamespacedName } from './module-utils';
 
 export abstract class Declaration {
   constructor(public readonly sortKey: Array<number | string>) {}
@@ -59,7 +59,7 @@ export class Assumption extends Declaration {
   }
 
   public render(): string {
-    return `declare const ${this.name}: ${module(this.type).importName}.${typeNamespacedName(this.type)};`;
+    return `declare const ${escapeIdentifier(this.name)}: ${module(this.type).importName}.${typeNamespacedName(this.type)};`;
   }
 }
 
@@ -77,6 +77,6 @@ export class AnyAssumption extends Declaration {
   }
 
   public render(): string {
-    return `declare const ${this.name}: any;`;
+    return `declare const ${escapeIdentifier(this.name)}: any;`;
   }
 }
