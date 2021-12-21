@@ -52,6 +52,10 @@ export class Import extends Declaration {
 export class Assumption extends Declaration {
   public constructor(private readonly type: reflect.Type, private readonly name: string) {
     super([1, name]);
+
+    if (name !== escapeIdentifier(name)) {
+      throw new Error('The name of this variable is a special keyword. call "escapeIdentifier" to escape the keyword.');
+    }
   }
 
   public equals(rhs: Declaration): boolean {
@@ -59,7 +63,7 @@ export class Assumption extends Declaration {
   }
 
   public render(): string {
-    return `declare const ${escapeIdentifier(this.name)}: ${module(this.type).importName}.${typeNamespacedName(this.type)};`;
+    return `declare const ${this.name}: ${module(this.type).importName}.${typeNamespacedName(this.type)};`;
   }
 }
 
@@ -70,6 +74,10 @@ export class Assumption extends Declaration {
 export class AnyAssumption extends Declaration {
   public constructor(private readonly name: string) {
     super([1, name]);
+
+    if (name !== escapeIdentifier(name)) {
+      throw new Error('The name of this variable is a special keyword. call "escapeIdentifier" to escape the keyword.');
+    }
   }
 
   public equals(rhs: Declaration): boolean {
@@ -77,6 +85,6 @@ export class AnyAssumption extends Declaration {
   }
 
   public render(): string {
-    return `declare const ${escapeIdentifier(this.name)}: any;`;
+    return `declare const ${this.name}: any;`;
   }
 }
