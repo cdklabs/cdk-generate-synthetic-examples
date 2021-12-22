@@ -34,10 +34,14 @@ npx cdk-generate-synthetic-examples .jsii
 
 ### With [Rosetta:Extract](https://www.npmjs.com/package/jsii-rosetta)
 
-A common workflow is to run `cdk-generate-synthetic-examples` and then
-[`rosetta:extract`](https://www.npmjs.com/package/jsii-rosetta) immediately after to compile and translate the synthetic
-examples. The `--extract` flag calls `rosetta` for you and immediately
-translates the examples into your directory's `.tabl.json` file.
+A common workflow is to run `cdk-generate-synthetic-examples` sandwiched
+between calls to [`rosetta:extract`](https://www.npmjs.com/package/jsii-rosetta).
+The first `rosetta:extract` will extract any possible hand-written examples 
+into your assembly. The second `rosetta:extract` will then compile and 
+translate the new  synthetic examples.
+
+The `--extract` flag is simply a helper that does the second `rosetta:extract` 
+call for you.
 
 ```bash
 npx cdk-generate-synthetic-examples .jsii --extract
