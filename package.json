@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^27.5.0",
+    "@types/jest": "^27.5.2",
     "@types/node": "^14",
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5",
@@ -49,18 +49,18 @@
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
-    "projen": "^0.56.3",
+    "projen": "^0.57.0",
     "standard-version": "^9",
     "ts-jest": "^27",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.2"
   },
   "dependencies": {
-    "@jsii/spec": "^1.58.0",
+    "@jsii/spec": "^1.59.0",
     "fs-extra": "^10.1.0",
-    "jsii": "^1.58.0",
-    "jsii-reflect": "^1.58.0",
-    "jsii-rosetta": "^1.58.0",
-    "yargs": "^17.4.1"
+    "jsii": "^1.59.0",
+    "jsii-reflect": "^1.59.0",
+    "jsii-rosetta": "^1.59.0",
+    "yargs": "^17.5.1"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
