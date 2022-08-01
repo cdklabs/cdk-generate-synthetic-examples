@@ -1,18 +1,14 @@
 import * as path from 'path';
-import * as spec from '@jsii/spec';
+import { Assembly, Type, writeAssembly, compressedAssemblyExists } from '@jsii/spec';
 import * as fs from 'fs-extra';
 import { FIXTURE_NAME } from './generate-missing-examples';
 
 /**
  * Replaces the file where the original assembly file *should* be found with a new assembly file.
- * Recalculates the fingerprint of the assembly to avoid tampering detection.
+ * Detects whether or not there is a compressed assembly, and if there is, compresses the new assembly also.
  */
-export async function replaceAssembly(assembly: spec.Assembly, directory: string): Promise<void> {
-  const fileName = path.join(directory, '.jsii');
-  await fs.writeJson(fileName, _fingerprint(assembly), {
-    encoding: 'utf8',
-    spaces: 2,
-  });
+export function replaceAssembly(assembly: Assembly, directory: string) {
+  writeAssembly(directory, _fingerprint(assembly), { compress: compressedAssemblyExists(directory) });
 }
 
 export function addFixtureToRosetta(directory: string, fileName: string, fixture: string) {
@@ -35,7 +31,7 @@ export function addFixtureToRosetta(directory: string, fileName: string, fixture
  * or spending extra time calculating a new fingerprint, we replace with '**********'
  * that demonstrates the fingerprint has changed.
  */
-function _fingerprint(assembly: spec.Assembly): spec.Assembly {
+function _fingerprint(assembly: Assembly): Assembly {
   assembly.fingerprint = '*'.repeat(10);
   return assembly;
 }
@@ -43,7 +39,7 @@ function _fingerprint(assembly: spec.Assembly): spec.Assembly {
 /**
  * Insert an example into the docs of a type
  */
-export function insertExample(visibleSource: string, type: spec.Type): void {
+export function insertExample(visibleSource: string, type: Type): void {
   if (type.docs) {
     type.docs.example = visibleSource;
   } else {

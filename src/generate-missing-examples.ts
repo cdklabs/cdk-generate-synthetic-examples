@@ -80,8 +80,7 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
   });
 
   console.log(`Saving ${loadedAssemblies.length} assemblies`);
-  await Promise.all((loadedAssemblies).map(({ assembly, assemblyLocation }) =>
-    replaceAssembly(assembly.spec, assemblyLocation)));
+  loadedAssemblies.map(({ assembly, assemblyLocation }) => replaceAssembly(assembly.spec, assemblyLocation));
 
   // extract snippets if extract flag is set.
   if (options.extractOptions) {
