@@ -1,17 +1,27 @@
 import * as os from 'os';
 import * as path from 'path';
+import { writeAssembly } from '@jsii/spec';
 import * as fs from 'fs-extra';
 import { PackageInfo, compileJsiiForTest } from 'jsii';
 
 export type MultipleSources = { [key: string]: string; 'index.ts': string };
 
+export interface AssemblyFixtureOptions {
+  /**
+   * Whether or not to compress the assembly
+   */
+  readonly compressAssembly?: boolean;
+}
+
 export class AssemblyFixture {
   public static async fromSource(
     source: string | MultipleSources,
     packageInfo: Partial<PackageInfo> & { name: string },
+    options: AssemblyFixtureOptions = {},
   ) {
-    const { assembly, files } = await compileJsiiForTest(source, (pi) => {
-      Object.assign(pi, packageInfo);
+    const { assembly, files } = compileJsiiForTest(source, {
+      packageJson: packageInfo,
+      compressAssembly: options.compressAssembly,
     });
 
     // The following is silly, however: the helper has compiled the given source to
@@ -25,7 +35,7 @@ export class AssemblyFixture {
     const modDir = path.join(tmpDir, 'node_modules', packageInfo.name);
     await fs.ensureDir(modDir);
 
-    await fs.writeJSON(path.join(modDir, '.jsii'), assembly);
+    writeAssembly(modDir, assembly, { compress: options.compressAssembly });
     await fs.writeJSON(path.join(modDir, 'package.json'), {
       name: packageInfo.name,
       jsii: packageInfo.jsii,
