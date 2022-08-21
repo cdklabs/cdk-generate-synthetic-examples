@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { promises as fs } from 'fs';
+import { replaceAssembly } from '@jsii/spec';
 import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
 
 import { extractSnippets } from 'jsii-rosetta/lib/commands/extract';
-import { insertExample, replaceAssembly, addFixtureToRosetta } from './assemblies';
+import { insertExample, addFixtureToRosetta } from './assemblies';
 import { generateAssignmentStatement } from './generate';
 
 const COMMENT_WARNING = [
