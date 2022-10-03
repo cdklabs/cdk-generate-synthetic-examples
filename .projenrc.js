@@ -26,6 +26,10 @@ const project = new typescript.TypeScriptProject({
   projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
   releaseToNpm: true,
   gitignore: ['*.js', '*.d.ts'],
+  autoApproveOptions: {
+    allowedUsernames: ['cdklabs-automation'],
+    secret: 'GITHUB_TOKEN',
+  },
 });
 
 project.synth();
