@@ -22,7 +22,6 @@
     "pre-compile": "npx projen pre-compile",
     "release": "npx projen release",
     "test": "npx projen test",
-    "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
@@ -38,7 +37,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
     "@types/node": "^14",
-    "@types/yargs": "^17.0.12",
+    "@types/yargs": "^17.0.13",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
@@ -49,18 +48,18 @@
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
-    "projen": "^0.61.44",
+    "projen": "^0.63.3",
     "standard-version": "^9",
     "ts-jest": "^27",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@jsii/spec": "^1.67.0",
+    "@jsii/spec": "^1.69.0",
     "fs-extra": "^10.1.0",
-    "jsii": "^1.67.0",
-    "jsii-reflect": "^1.67.0",
-    "jsii-rosetta": "^1.67.0",
-    "yargs": "^17.5.1"
+    "jsii": "^1.69.0",
+    "jsii-reflect": "^1.69.0",
+    "jsii-rosetta": "^1.69.0",
+    "yargs": "^17.6.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
