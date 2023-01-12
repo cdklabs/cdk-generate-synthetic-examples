@@ -1,7 +1,7 @@
 import * as reflect from 'jsii-reflect';
 
-import { generateAssignmentStatement } from '../lib/generate';
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS, MultipleSources } from './testutil';
+import { generateAssignmentStatement } from '../lib/generate';
 
 describe('generateClassAssignment ', () => {
   test('generates example for class with static methods',

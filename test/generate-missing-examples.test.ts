@@ -3,8 +3,8 @@ import { SPEC_FILE_NAME, SPEC_FILE_NAME_COMPRESSED } from '@jsii/spec';
 import * as fs from 'fs-extra';
 
 import { LanguageTablet, TargetLanguage } from 'jsii-rosetta';
-import { generateMissingExamples } from '../lib/generate-missing-examples';
 import { DUMMY_ASSEMBLY_TARGETS, AssemblyFixture } from './testutil';
+import { generateMissingExamples } from '../lib/generate-missing-examples';
 
 test('@aws-cdk/core special case', async () => {
   const assembly = await AssemblyFixture.fromSource(
