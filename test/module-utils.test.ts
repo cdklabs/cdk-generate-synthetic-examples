@@ -1,7 +1,7 @@
 import * as reflect from 'jsii-reflect';
 
-import { module } from '../lib/module-utils';
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS } from './testutil';
+import { module } from '../lib/module-utils';
 
 describe('v1 names are correct: ', () => {
   test('core', async () => {
