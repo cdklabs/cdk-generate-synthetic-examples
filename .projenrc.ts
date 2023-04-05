@@ -1,6 +1,7 @@
-const { typescript } = require('projen');
+import { CdklabsTypeScriptProject } from 'cdklabs-projen-project-types';
 
-const project = new typescript.TypeScriptProject({
+const project = new CdklabsTypeScriptProject({
+  projenrcTs: true,
   defaultReleaseBranch: 'main',
   name: 'cdk-generate-synthetic-examples',
   repository: 'https://github.com/cdklabs/cdk-generate-synthetic-examples',
@@ -17,13 +18,13 @@ const project = new typescript.TypeScriptProject({
     'yargs',
   ],
   devDeps: [
+    'cdklabs-projen-project-types',
     '@types/jest',
     '@types/yargs',
     'jest',
     '@types/fs-extra',
     'typescript',
   ],
-  projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
   releaseToNpm: true,
   gitignore: ['*.js', '*.d.ts'],
   autoApproveUpgrades: true,
