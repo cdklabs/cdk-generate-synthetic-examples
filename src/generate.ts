@@ -175,7 +175,11 @@ function generateStaticFactoryPropertyExample(staticFactoryProperty: reflect.Pro
  * Generate an example value of the given parameter.
  */
 function exampleValueForParameter(context: ExampleContext, param: reflect.Parameter, position: number, level: number): Code {
-  if (param.name === 'scope' && position === 0) {
+  if (
+    param.name === 'scope' &&
+    ['constructs.IConstruct', 'constructs.Construct'].includes(param.type.fqn ?? '') &&
+    position === 0
+  ) {
     return new Code('this');
   }
 

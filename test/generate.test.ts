@@ -93,7 +93,7 @@ describe('generateClassAssignment ', () => {
         'declare const prop5: any;',
         'declare const property: my_assembly.Property;',
         '',
-        'const classA = new my_assembly.ClassA(this, \'MyClassA\', {',
+        'const classA = new my_assembly.ClassA(\'scope\', \'MyClassA\', {',
         '  prop1: 123,',
         '  prop2: property,',
         '  prop3: [\'prop3\'],',
@@ -150,7 +150,7 @@ describe('generateClassAssignment ', () => {
       expected: [
         'import * as my_assembly from \'my_assembly\';',
         '',
-        'const classA = new my_assembly.ClassA(this, \'MyClassA\', {',
+        'const classA = new my_assembly.ClassA(\'scope\', \'MyClassA\', {',
         '  prop1: 123,',
         '',
         '  // the properties below are optional',
@@ -178,7 +178,7 @@ describe('generateClassAssignment ', () => {
       expected: [
         'import * as my_assembly from \'my_assembly\';',
         '',
-        'const classA = new my_assembly.ClassA(this, \'MyClassA\', /* all optional props */ {',
+        'const classA = new my_assembly.ClassA(\'scope\', \'MyClassA\', /* all optional props */ {',
         '  prop1: 123,',
         '  prop2: 123,',
         '});',
