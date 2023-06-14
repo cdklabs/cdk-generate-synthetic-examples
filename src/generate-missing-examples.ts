@@ -5,12 +5,7 @@ import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
 
 import { extractSnippets } from 'jsii-rosetta/lib/commands/extract';
 import { insertExample, addFixtureToRosetta } from './assemblies';
-import { generateAssignmentStatement } from './generate';
-
-const COMMENT_WARNING = [
-  '// The code below shows an example of how to instantiate this type.',
-  '// The values are placeholders you should change.',
-];
+import { generateExample } from './generate';
 
 export const FIXTURE_NAME = '_generated';
 
@@ -56,17 +51,11 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
 
     const failed = new Array<string>();
     const generatedSnippets = documentableTypes.flatMap((classType) => {
-      const example = generateAssignmentStatement(classType);
-      if (!example) {
+      const visibleSource = generateExample(classType);
+      if (visibleSource === undefined) {
         failed.push(classType.name);
         return [];
       }
-
-      const visibleSource = [
-        ...COMMENT_WARNING,
-        ...example.renderDeclarations(),
-        example.renderCode(),
-      ].join('\n').trimLeft();
 
       insertExample(visibleSource, classType.spec);
       return [visibleSource];

@@ -15,6 +15,18 @@ const SPECIAL_TYPE_EXAMPLES: Record<string, string> = {
   'aws-cdk-lib.Duration': 'cdk.Duration.minutes(30)',
 };
 
+const COMMENT_WARNING = [
+  '// The code below shows an example of how to instantiate this type.',
+  '// The values are placeholders you should change.',
+];
+
+const MAX_EXAMPLE_LINES = 500;
+
+const TOO_LARGE_WARNING = [
+  `// The generated example for this type would exceed ${MAX_EXAMPLE_LINES} lines,`,
+  '// and has been elided for readability.',
+];
+
 /**
  * Context on the example that we are building.
  * This object persists throughout the recursive call
@@ -37,6 +49,25 @@ class ExampleContext {
   public get rendered() {
     return this._rendered;
   }
+}
+
+export function generateExample(classType: reflect.ClassType | reflect.InterfaceType): string | undefined {
+  const example = generateAssignmentStatement(classType);
+  if (!example) {
+    return undefined;
+  }
+
+  const rendered = [
+    ...COMMENT_WARNING,
+    ...example.renderDeclarations(),
+    example.renderCode(),
+  ].join('\n').trimStart();
+
+  if (rendered.split('\n').length > MAX_EXAMPLE_LINES) {
+    return TOO_LARGE_WARNING.join('\n');
+  }
+
+  return rendered;
 }
 
 export function generateAssignmentStatement(type: reflect.ClassType | reflect.InterfaceType): Code | undefined {

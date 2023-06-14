@@ -1,7 +1,7 @@
 import * as reflect from 'jsii-reflect';
 
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS, MultipleSources } from './testutil';
-import { generateAssignmentStatement } from '../lib/generate';
+import { generateExample, generateAssignmentStatement } from '../src/generate';
 
 describe('generateClassAssignment ', () => {
   test('generates example for class with static methods',
@@ -292,10 +292,33 @@ test('rendering types in submodules', expectedDocTest({
   ],
 }));
 
+test('large examples are elided', async () => {
+  const properties = range(1000).map((i) => `readonly prop${i}: string`);
+  await expectedDocTest({
+    sources: {
+      'index.ts': `
+        export interface SomeStruct {
+          ${properties}
+        }
+      `,
+    },
+    typeName: 'SomeStruct',
+    renderFullExample: true,
+    expected: [
+      '// The generated example for this type would exceed 500 lines,',
+      '// and has been elided for readability.',
+    ],
+  })();
+});
+
 interface DocTest {
   readonly sources: MultipleSources;
   readonly typeName: string;
   readonly expected: string[];
+  /**
+   * If true, we use generateExample. If false, we use generateAssignmentStatement.
+   */
+  readonly renderFullExample?: boolean;
 }
 
 function expectedDocTest(testParams: DocTest) {
@@ -315,9 +338,22 @@ function expectedDocTest(testParams: DocTest) {
       if (!type.isClassType() && !type.isInterfaceType()) {
         throw new Error('Expecting class or interface');
       }
-      expect(generateAssignmentStatement(type)?.toString()?.split('\n')).toEqual(testParams.expected);
+
+      const rendered = testParams.renderFullExample
+        ? generateExample(type)
+        : generateAssignmentStatement(type)?.toString();
+
+      expect(rendered?.split('\n')).toEqual(testParams.expected);
     } finally {
       await assembly.cleanup();
     }
   };
+}
+
+function range(n: number): number[] {
+  const ret = new Array<number>();
+  for (let i = 0; i < n; i++) {
+    ret.push(i);
+  }
+  return ret;
 }
