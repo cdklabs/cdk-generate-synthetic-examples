@@ -152,7 +152,7 @@ describe('generateClassAssignment ', () => {
     await assembly.cleanup();
   });
 
-  test('returns undefined for protected methods', async () => {
+  test('returns undefined when only protected/private methods present', async () => {
     const assembly = await AssemblyFixture.fromSource(
       {
         'index.ts': `
