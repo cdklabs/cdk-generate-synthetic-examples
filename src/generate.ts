@@ -72,6 +72,7 @@ export function generateExample(classType: reflect.ClassType | reflect.Interface
 
 export function generateAssignmentStatement(type: reflect.ClassType | reflect.InterfaceType): Code | undefined {
   const context = new ExampleContext(type.system);
+  context.rendered.add(type.fqn);
 
   if (type.isClassType()) {
     const expression = exampleValueForClass(context, type, 0);
@@ -274,8 +275,9 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
         newType.members[0].name);
     }
 
-    // If this is struct and we're not already rendering it (recursion breaker), expand
-    if (isStructType(newType)) {
+    // If this is a struct or class and we're not already rendering it (recursion breaker), expand
+    if (isStructType(newType) || newType.isClassType()) {
+      console.log('HERE', context.rendered.has(newType.fqn), newType.fqn);
       if (context.rendered.has(newType.fqn)) {
         // Recursion breaker -- if we go by the default behavior end up saying something like:
         //
@@ -287,18 +289,18 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
         // Which TypeScript's type analyzer can't automatically derive a type for. We need to
         // annotate SOMETHING. A simple fix is to use a different variable name so the value
         // isn't self-recursive.
-
         return addAssumedVariableDeclaration(newType, '_');
       }
+    }
 
-
+    if (isStructType(newType)) {
       context.rendered.add(newType.fqn);
       const ret = exampleValueForStruct(context, newType, level);
       context.rendered.delete(newType.fqn);
       return ret;
     }
 
-    // For all other types  we will assume you already have a variable of the appropriate type.
+    // For all other types we will assume you already have a variable of the appropriate type.
     return addAssumedVariableDeclaration(newType);
   }
 

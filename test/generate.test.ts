@@ -61,6 +61,31 @@ describe('generateClassAssignment ', () => {
     }),
   );
 
+  test('generates example for class that references itself',
+    expectedDocTest({
+      sources: {
+        'index.ts': `
+        export class ClassA {
+          public constructor(public readonly props: ClassAProps) {}
+        }
+        export interface ClassAProps {
+          readonly parentClass: ClassA,
+        }
+        `,
+      },
+      typeName: 'ClassA',
+      expected: [
+        'import * as my_assembly from \'my_assembly\';',
+        '',
+        'declare const classA_: my_assembly.ClassA;',
+        '',
+        'const classA = new my_assembly.ClassA({',
+        '  parentClass: classA_,',
+        '});',
+      ],
+    }),
+  );
+
   test('generates example for more complicated class instantiation',
     expectedDocTest({
       sources: {
