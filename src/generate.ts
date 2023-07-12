@@ -144,7 +144,7 @@ function getAccessibleConstructor(classType: reflect.ClassType): reflect.Initial
  */
 function getStaticFactoryMethods(classType: reflect.ClassType): reflect.Method[] {
   return classType.allMethods.filter(method =>
-    method.static && extendsRef(classType, method.returns.type),
+    method.static && !method.protected && extendsRef(classType, method.returns.type),
   );
 }
 
@@ -153,7 +153,7 @@ function getStaticFactoryMethods(classType: reflect.ClassType): reflect.Method[]
  */
 function getStaticFactoryProperties(classType: reflect.ClassType): reflect.Property[] {
   return classType.allProperties.filter(prop =>
-    prop.static && extendsRef(classType, prop.type),
+    prop.static && !prop.protected && extendsRef(classType, prop.type),
   );
 }
 

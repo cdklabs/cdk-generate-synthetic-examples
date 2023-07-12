@@ -86,6 +86,25 @@ describe('generateClassAssignment ', () => {
     }),
   );
 
+  test('generates example that ignores protected static method',
+    expectedDocTest({
+      sources: {
+        'index.ts': `
+        export class ClassA {
+          protected static firstMethod() { return new ClassA(); }
+          public static secondMethod() { return new ClassA(); }
+          private constructor() {}
+        }`,
+      },
+      typeName: 'ClassA',
+      expected: [
+        'import * as my_assembly from \'my_assembly\';',
+        '',
+        'const classA = my_assembly.ClassA.secondMethod();',
+      ],
+    }),
+  );
+
   test('generates example for more complicated class instantiation',
     expectedDocTest({
       sources: {
@@ -141,6 +160,53 @@ describe('generateClassAssignment ', () => {
         'index.ts': `
         export class ClassA {
           private constructor() {}
+        }`,
+      },
+      {
+        name: 'my_assembly',
+        jsii: DUMMY_ASSEMBLY_TARGETS,
+      },
+    );
+
+    const ts = new reflect.TypeSystem();
+    await ts.load(assembly.directory);
+
+    const type = ts.findClass('my_assembly.ClassA');
+    expect(generateAssignmentStatement(type)).toBeUndefined();
+
+    await assembly.cleanup();
+  });
+
+  test('returns undefined when only protected/private methods present', async () => {
+    const assembly = await AssemblyFixture.fromSource(
+      {
+        'index.ts': `
+        export class ClassA {
+          protected static protectedMethod() { new ClassA(); }
+          private constructor() {}
+        }`,
+      },
+      {
+        name: 'my_assembly',
+        jsii: DUMMY_ASSEMBLY_TARGETS,
+      },
+    );
+
+    const ts = new reflect.TypeSystem();
+    await ts.load(assembly.directory);
+
+    const type = ts.findClass('my_assembly.ClassA');
+    expect(generateAssignmentStatement(type)).toBeUndefined();
+
+    await assembly.cleanup();
+  });
+
+  test('returns undefined for abstract classes', async () => {
+    const assembly = await AssemblyFixture.fromSource(
+      {
+        'index.ts': `
+        export abstract class ClassA {
+          public constructor() {}
         }`,
       },
       {
