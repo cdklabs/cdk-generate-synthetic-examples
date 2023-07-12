@@ -61,7 +61,7 @@ describe('generateClassAssignment ', () => {
     }),
   );
 
-  test('blah',
+  test('generates example that ignores protected static method',
     expectedDocTest({
       sources: {
         'index.ts': `
