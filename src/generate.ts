@@ -277,7 +277,6 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
 
     // If this is a struct or class and we're not already rendering it (recursion breaker), expand
     if (isStructType(newType) || newType.isClassType()) {
-      console.log('HERE', context.rendered.has(newType.fqn), newType.fqn);
       if (context.rendered.has(newType.fqn)) {
         // Recursion breaker -- if we go by the default behavior end up saying something like:
         //
