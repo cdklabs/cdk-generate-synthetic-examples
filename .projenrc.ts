@@ -1,4 +1,5 @@
 import { CdklabsTypeScriptProject } from 'cdklabs-projen-project-types';
+import { ReleasableCommits } from 'projen';
 
 const project = new CdklabsTypeScriptProject({
   projenrcTs: true,
@@ -29,6 +30,8 @@ const project = new CdklabsTypeScriptProject({
   minNodeVersion: '16.0.0',
   enablePRAutoMerge: true,
   setNodeEngineVersion: false,
+  // Adding temporarily to release the last change I made
+  releasableCommits: ReleasableCommits.everyCommit(),
 });
 
 project.synth();
