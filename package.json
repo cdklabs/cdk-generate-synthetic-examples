@@ -56,11 +56,11 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@jsii/spec": "^1.90.0",
+    "@jsii/spec": "^1.91.0",
     "fs-extra": "^10.1.0",
-    "jsii": "^1.90.0",
-    "jsii-reflect": "^1.90.0",
-    "jsii-rosetta": "^1.90.0",
+    "jsii": "^1.91.0",
+    "jsii-reflect": "^1.91.0",
+    "jsii-rosetta": "^1.91.0",
     "yargs": "^17.7.2"
   },
   "main": "lib/index.js",
