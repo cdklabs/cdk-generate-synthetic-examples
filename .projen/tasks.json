@@ -229,13 +229,13 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/fs-extra,@types/jest,@types/node,@types/yargs,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,cdklabs-projen-project-types,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,standard-version,ts-jest,ts-node,typescript,@jsii/spec,fs-extra,jsii,jsii-reflect,jsii-rosetta,yargs"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/fs-extra,@types/jest,@types/node,@types/yargs,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,cdklabs-projen-project-types,constructs,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,standard-version,ts-jest,ts-node,typescript,@jsii/spec,fs-extra,jsii,jsii-reflect,jsii-rosetta,yargs"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/fs-extra @types/jest @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser cdklabs-projen-project-types eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen standard-version ts-jest ts-node typescript @jsii/spec fs-extra jsii jsii-reflect jsii-rosetta yargs"
+          "exec": "yarn upgrade @types/fs-extra @types/jest @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser cdklabs-projen-project-types constructs eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen standard-version ts-jest ts-node typescript @jsii/spec fs-extra jsii jsii-reflect jsii-rosetta yargs"
         },
         {
           "exec": "npx projen"
