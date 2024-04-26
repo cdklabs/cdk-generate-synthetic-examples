@@ -3,8 +3,11 @@ import * as path from 'path';
 import { SPEC_FILE_NAME, SPEC_FILE_NAME_COMPRESSED } from '@jsii/spec';
 
 import { LanguageTablet, TargetLanguage } from 'jsii-rosetta';
-import { DUMMY_ASSEMBLY_TARGETS, AssemblyFixture } from './testutil';
+import { DUMMY_ASSEMBLY_TARGETS, AssemblyFixture, DUMMY_ASSEMBLY_DEPS } from './testutil';
 import { generateMissingExamples } from '../src/generate-missing-examples';
+
+// these tests need to install an npm package
+jest.setTimeout(30000);
 
 test('@aws-cdk/core special case', async () => {
   const assembly = await AssemblyFixture.fromSource(
@@ -26,6 +29,7 @@ test('@aws-cdk/core special case', async () => {
     {
       name: '@aws-cdk/core',
       jsii: DUMMY_ASSEMBLY_TARGETS,
+      jsiiRosetta: DUMMY_ASSEMBLY_DEPS,
     },
   );
   try {
@@ -60,6 +64,7 @@ test('test end-to-end and translation to Python', async () => {
     {
       name: 'my_assembly',
       jsii: DUMMY_ASSEMBLY_TARGETS,
+      jsiiRosetta: DUMMY_ASSEMBLY_DEPS,
     },
   );
   try {
@@ -113,6 +118,7 @@ test('test end-to-end and translation to Python with compressed assembly', async
     {
       name: 'my_assembly',
       jsii: DUMMY_ASSEMBLY_TARGETS,
+      jsiiRosetta: DUMMY_ASSEMBLY_DEPS,
     },
     {
       compressAssembly: true,

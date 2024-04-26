@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
+import * as child_process from 'child_process';
 import { promises as fs } from 'fs';
+import path from 'path';
 import { replaceAssembly } from '@jsii/spec';
 import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
-
-import { extractSnippets } from 'jsii-rosetta/lib/commands/extract';
 import { insertExample, addFixtureToRosetta } from './assemblies';
 import { generateExample } from './generate';
 
@@ -79,11 +79,15 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
     }
 
     console.log(`Extracting snippets from ${assemblyLocations.length} assemblies`);
-    await extractSnippets(assemblyLocations, {
-      cacheFromFile: options.extractOptions.cache,
-      cacheToFile: options.extractOptions.cache,
-      includeCompilerDiagnostics: true,
-    });
+
+    const rosetta = path.join(path.dirname(require.resolve('jsii-rosetta/package.json')), 'bin', 'jsii-rosetta');
+    const args = ['extract', ...assemblyLocations, '--compile'];
+
+    if (options.extractOptions.cache) {
+      args.push('--cache', options.extractOptions.cache);
+    }
+
+    await fork(rosetta, args);
   }
 }
 
@@ -117,5 +121,14 @@ function generateFixture(assembly: Assembly): string {
     'super(scope, id);',
     '/// here',
     '} }',
-  ].join('\n').trimLeft();
+  ].join('\n').trimStart();
+}
+
+async function fork(scriptPath: string, args: string[] = []) {
+  return new Promise((resolve, reject) => {
+    let script = child_process.fork(scriptPath, args);
+
+    script.on('exit', code => resolve(code));
+    script.on('error', err => reject(err));
+  });
 }

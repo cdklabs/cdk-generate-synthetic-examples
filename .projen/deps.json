@@ -59,7 +59,16 @@
       "type": "build"
     },
     {
+      "name": "jsii-rosetta",
+      "version": "^1.85.0 || ~5.1.2 || ~5.2.0 || ~5.3.0 || ~5.4.0",
+      "type": "build"
+    },
+    {
       "name": "projen",
+      "type": "build"
+    },
+    {
+      "name": "semver",
       "type": "build"
     },
     {
@@ -85,10 +94,6 @@
     },
     {
       "name": "jsii-reflect",
-      "type": "runtime"
-    },
-    {
-      "name": "jsii-rosetta",
       "type": "runtime"
     },
     {
