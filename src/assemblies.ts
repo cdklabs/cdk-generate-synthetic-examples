@@ -1,6 +1,6 @@
+import * as fs from 'fs';
 import * as path from 'path';
 import { Type } from '@jsii/spec';
-import * as fs from 'fs-extra';
 import { FIXTURE_NAME } from './generate-missing-examples';
 
 export function addFixtureToRosetta(directory: string, fileName: string, fixture: string) {

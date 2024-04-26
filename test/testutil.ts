@@ -1,7 +1,7 @@
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { writeAssembly } from '@jsii/spec';
-import * as fs from 'fs-extra';
 import { PackageInfo, compileJsiiForTest } from 'jsii';
 
 export type MultipleSources = { [key: string]: string; 'index.ts': string };
@@ -31,18 +31,20 @@ export class AssemblyFixture {
     //
     // In fact we will drop them in 'node_modules/<name>' so they can be imported
     // as if they were installed.
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'jsii-rosetta'));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'jsii-rosetta'));
     const modDir = path.join(tmpDir, 'node_modules', packageInfo.name);
-    await fs.ensureDir(modDir);
+    if (!fs.existsSync(modDir)) {
+      fs.mkdirSync(modDir, { recursive: true });
+    }
 
     writeAssembly(modDir, assembly, { compress: options.compressAssembly });
-    await fs.writeJSON(path.join(modDir, 'package.json'), {
+    fs.writeFileSync(path.join(modDir, 'package.json'), JSON.stringify({
       name: packageInfo.name,
       jsii: packageInfo.jsii,
-    });
+    }, null, 2));
     for (const [fileName, fileContents] of Object.entries(files)) {
       // eslint-disable-next-line no-await-in-loop
-      await fs.writeFile(path.join(modDir, fileName), fileContents);
+      fs.writeFileSync(path.join(modDir, fileName), fileContents);
     }
 
     return new AssemblyFixture(modDir);
@@ -50,8 +52,8 @@ export class AssemblyFixture {
 
   private constructor(public readonly directory: string) {}
 
-  public async cleanup() {
-    await fs.remove(this.directory);
+  public cleanup() {
+    fs.rmSync(this.directory, { recursive: true });
   }
 }
 

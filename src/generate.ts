@@ -75,7 +75,7 @@ export function generateAssignmentStatement(type: reflect.ClassType | reflect.In
   context.rendered.add(type.fqn);
 
   if (type.isClassType()) {
-    const expression = exampleValueForClass(context, type, 0);
+    const expression = exampleValueForClass(context, type as reflect.ClassType, 0);
     if (!expression) { return undefined; }
     return Code.concatAll(
       `const ${escapeIdentifier(lowercaseFirstLetter(type.name))} = `,
@@ -85,7 +85,7 @@ export function generateAssignmentStatement(type: reflect.ClassType | reflect.In
   }
 
   if (type.isInterfaceType()) {
-    const expression = exampleValueForStruct(context, type, 0);
+    const expression = exampleValueForStruct(context, type as reflect.InterfaceType, 0);
     if (!expression) { return undefined; }
 
     return Code.concatAll(

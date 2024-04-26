@@ -1,4 +1,4 @@
-## CDK Generate Synthetic Examples
+# CDK Generate Synthetic Examples
 
 This tool will find all classes in the JSII assembly that don't yet have
 any example code associated with them, and will generate a synthetic
@@ -8,16 +8,15 @@ all classes get something usable (which otherwise would not have any
 examples at all). It is designed to run during the build of a CDK Construct
 Library.
 
-### Install
+## Install
 
-This tool is published as an npm module, so it can be either installed
-locally or globally via:
+This tool is published as an npm module, install locally:
 
 ```bash
-npm i -g cdk-generate-synthetic-examples
+npm install cdk-generate-synthetic-examples
 ```
 
-### Usage
+## Usage
 
 Suppose you are in the base directory of your CDK construct, `aws-construct`.
 After a successful build, you have a `.jsii` file.
@@ -36,11 +35,11 @@ npx cdk-generate-synthetic-examples .jsii
 
 A common workflow is to run `cdk-generate-synthetic-examples` sandwiched
 between calls to [`rosetta:extract`](https://www.npmjs.com/package/jsii-rosetta).
-The first `rosetta:extract` will extract any possible hand-written examples 
-into your assembly. The second `rosetta:extract` will then compile and 
+The first `rosetta:extract` will extract any possible hand-written examples
+into your assembly. The second `rosetta:extract` will then compile and
 translate the new  synthetic examples.
 
-The `--extract` flag is simply a helper that does the second `rosetta:extract` 
+The `--extract` flag is simply a helper that does the second `rosetta:extract`
 call for you.
 
 ```bash
