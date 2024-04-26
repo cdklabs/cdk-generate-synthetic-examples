@@ -6,6 +6,9 @@ import { LanguageTablet, TargetLanguage } from 'jsii-rosetta';
 import { DUMMY_ASSEMBLY_TARGETS, AssemblyFixture, DUMMY_ASSEMBLY_DEPS } from './testutil';
 import { generateMissingExamples } from '../src/generate-missing-examples';
 
+// these tests need to install an npm package
+jest.setTimeout(30000);
+
 test('@aws-cdk/core special case', async () => {
   const assembly = await AssemblyFixture.fromSource(
     {
