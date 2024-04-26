@@ -41,6 +41,7 @@ export class AssemblyFixture {
     fs.writeFileSync(path.join(modDir, 'package.json'), JSON.stringify({
       name: packageInfo.name,
       jsii: packageInfo.jsii,
+      jsiiRosetta: packageInfo.jsiiRosetta,
     }, null, 2));
     for (const [fileName, fileContents] of Object.entries(files)) {
       // eslint-disable-next-line no-await-in-loop
@@ -56,6 +57,11 @@ export class AssemblyFixture {
     fs.rmSync(this.directory, { recursive: true });
   }
 }
+export const DUMMY_ASSEMBLY_DEPS = {
+  exampleDependencies: {
+    constructs: '^10.0.0',
+  },
+};
 
 export const DUMMY_ASSEMBLY_TARGETS = {
   targets: {
