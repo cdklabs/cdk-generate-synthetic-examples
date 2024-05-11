@@ -50,7 +50,7 @@
     "jest-junit": "^15",
     "jsii": "^5.4.12",
     "jsii-rosetta": "^1.85.0 || ~5.1.2 || ~5.2.0 || ~5.3.0 || ~5.4.0",
-    "projen": "^0.81.8",
+    "projen": "^0.81.10",
     "semver": "^7.6.2",
     "standard-version": "^9",
     "ts-jest": "^29",
