@@ -38,6 +38,7 @@
   "devDependencies": {
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
+    "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.33",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
