@@ -38,10 +38,12 @@
   "devDependencies": {
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
+    "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.32",
-    "@typescript-eslint/eslint-plugin": "^6",
-    "@typescript-eslint/parser": "^6",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
     "cdklabs-projen-project-types": "^0.1.197",
+    "commit-and-tag-version": "^12",
     "constructs": "^10.0.0",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -50,9 +52,8 @@
     "jest-junit": "^15",
     "jsii": "^5.4.20",
     "jsii-rosetta": "^1.85.0 || ~5.1.2 || ~5.2.0 || ~5.3.0 || ~5.4.0",
-    "projen": "^0.82.4",
+    "projen": "^0.87.2",
     "semver": "^7.6.2",
-    "standard-version": "^9",
     "ts-jest": "^29",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
@@ -71,8 +72,10 @@
   "jest": {
     "coverageProvider": "v8",
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/@(test|src)/**/*(*.)@(spec|test).ts?(x)"
+      "<rootDir>/@(src|test)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(src|test)/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/@(projenrc)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(projenrc)/**/__tests__/**/*.ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,

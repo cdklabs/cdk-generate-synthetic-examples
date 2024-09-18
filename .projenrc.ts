@@ -14,6 +14,7 @@ const project = new CdklabsTypeScriptProject({
     'yargs',
   ],
   devDeps: [
+    '@types/semver',
     '@types/jest',
     '@types/yargs',
     'cdklabs-projen-project-types',
