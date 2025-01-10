@@ -29,7 +29,7 @@ const project = new CdklabsTypeScriptProject({
   },
   releaseToNpm: true,
   gitignore: ['*.js', '*.d.ts'],
-  workflowNodeVersion: '18.x',
+  workflowNodeVersion: '20.x',
   enablePRAutoMerge: true,
   setNodeEngineVersion: false,
 });
