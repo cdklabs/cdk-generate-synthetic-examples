@@ -3,7 +3,7 @@ import * as reflect from 'jsii-reflect';
 import { TypeSystem } from 'jsii-reflect';
 
 import { Code } from './code';
-import { AnyAssumption, Assumption, Import } from './declaration';
+import { AnyAssumption, Assumption, Import, IntersectionAssumption } from './declaration';
 import { escapeIdentifier, typeReference } from './module-utils';
 import { sortBy } from './utils';
 
@@ -247,9 +247,15 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
 
   // Just pick the first type if it is a union type
   if (typeRef.unionOfTypes !== undefined) {
-    const newType = getBaseUnionType(typeRef.unionOfTypes);
+    const newType = firstResolvedType(typeRef.unionOfTypes);
     return exampleValue(context, newType, name, level);
   }
+
+  // If it's an intersection type we have to just assume that we have a value of that type
+  if (typeRef.intersectionOfTypes !== undefined) {
+    return intersectionExample(typeRef.intersectionOfTypes, context);
+  }
+
   // If its a collection create a collection of one element
   if (typeRef.arrayOfType !== undefined) {
     return Code.concatAll('[', exampleValue(context, typeRef.arrayOfType, name, level), ']');
@@ -306,7 +312,25 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
   throw new Error('If this happens, then reflect.typeRefernce must have a new value');
 }
 
-function getBaseUnionType(types: reflect.TypeReference[]): reflect.TypeReference {
+function intersectionExample(typeRefs: reflect.TypeReference[], context: ExampleContext): Code {
+  const firstType = typeRefs[0];
+
+  // Get the variable name from the first type
+  let variableName = 'variable';
+  if (firstType.fqn) {
+    const newType = context.typeSystem.findFqn(firstType.fqn);
+    variableName = escapeIdentifier(lowercaseFirstLetter(stripLeadingI(newType.name)));
+  }
+
+  // We declare an assumption on this variable
+  const types = typeRefs.map((t) => context.typeSystem.findFqn((t as any).fqn));
+  return new Code(variableName, [
+    new IntersectionAssumption(types, variableName),
+    ...types.map((t) => new Import(t)),
+  ]);
+}
+
+function firstResolvedType(types: reflect.TypeReference[]): reflect.TypeReference {
   for (const newType of types) {
     if (newType.fqn?.endsWith('.IResolvable')) {
       continue;
@@ -422,3 +446,4 @@ function lowercaseFirstLetter(str: string): string {
 function tab(level: number): string {
   return '  '.repeat(level);
 }
+
