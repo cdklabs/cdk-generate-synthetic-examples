@@ -67,6 +67,24 @@ export class Assumption extends Declaration {
   }
 }
 
+export class IntersectionAssumption extends Declaration {
+  public constructor(private readonly types: reflect.Type[], private readonly name: string) {
+    super([1, name]);
+
+    if (name !== escapeIdentifier(name)) {
+      throw new Error('The name of this variable is a special keyword. call "escapeIdentifier" to escape the keyword.');
+    }
+  }
+
+  public equals(rhs: Declaration): boolean {
+    return this.render() === rhs.render();
+  }
+
+  public render(): string {
+    return `declare const ${this.name}: ${this.types.map((t) => `${module(t).importName}.${typeNamespacedName(t)}`).join(' & ')};`;
+  }
+}
+
 /**
  * An assumption for an 'any' time. This will be treated the same as 'Assumption' but with a
  * different render result.

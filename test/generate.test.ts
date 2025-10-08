@@ -105,6 +105,34 @@ describe('generateClassAssignment ', () => {
     }),
   );
 
+  test('generates example for class that takes an intersection type',
+    expectedDocTest({
+      sources: {
+        'index.ts': `
+        export interface IFoo { readonly foo: string; }
+        export interface IBar { readonly bar: string; }
+
+        export class ClassA {
+          public constructor(props: ClassAProps) { void props; }
+        }
+        export interface ClassAProps {
+          readonly input: IFoo & IBar;
+        }
+        `,
+      },
+      typeName: 'ClassA',
+      expected: [
+        'import * as my_assembly from \'my_assembly\';',
+        '',
+        'declare const foo: my_assembly.IFoo & my_assembly.IBar;',
+        '',
+        'const classA = new my_assembly.ClassA({',
+        '  input: foo,',
+        '});',
+      ],
+    }),
+  );
+
   test('generates example for more complicated class instantiation',
     expectedDocTest({
       sources: {
