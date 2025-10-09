@@ -85,8 +85,9 @@ export class RosettaPeerDependency extends Component {
         run: ['npx projen compile', 'npx projen test'].join('\n'),
       },
       {
+        // Check that the actually installed version matches the requested version (we don't trust yarn apparently)
         name: 'Check Rosetta version',
-        run: `test $(npx ${JSII_ROSETTA} --version) = "\${{ matrix.rosetta }}"`,
+        run: 'node -e "process.exit(Number(!require(\'semver\').satisfies(\'$(npx ${JSII_ROSETTA} --version)\', \'${{ matrix.rosetta }}\')))"',
       }],
     });
   }
