@@ -46,9 +46,13 @@ export class RosettaPeerDependency extends Component {
         NODE_OPTIONS: '--max_old_space_size=4096',
       },
       strategy: {
+        failFast: false,
         matrix: {
           domain: {
-            rosetta: this.calculateMinimalVersions(options.supportedVersions),
+            rosetta: [
+              ...Object.values(options.supportedVersions).filter((v) => v !== false),
+              ...this.calculateMinimalVersions(options.supportedVersions),
+            ],
           },
         },
       },
@@ -81,8 +85,14 @@ export class RosettaPeerDependency extends Component {
         run: ['npx projen compile', 'npx projen test'].join('\n'),
       },
       {
+        // Check that the actually installed version matches the requested version (we don't trust yarn apparently)
         name: 'Check Rosetta version',
-        run: `test $(npx ${JSII_ROSETTA} --version) = "\${{ matrix.rosetta }}"`,
+        run: [
+          `ACTUAL_ROSETTA=$(npx ${JSII_ROSETTA} --version)`,
+          'echo "Actual version: ${ACTUAL_ROSETTA}"',
+          'echo "Expected range: ${{ matrix.rosetta }}"',
+          'node -e "process.exit(Number(!require(\'semver\').satisfies(\'${ACTUAL_ROSETTA}\', \'${{ matrix.rosetta }}\')))"',
+        ].join('\n'),
       }],
     });
   }
