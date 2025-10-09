@@ -104,7 +104,7 @@ jobs:
           npx projen test
       - name: Check Rosetta version
         run: |-
-          ACTUAL_ROSETTA=$(npx ${JSII_ROSETTA} --version)
+          ACTUAL_ROSETTA=$(npx jsii-rosetta --version)
           echo "Actual version: ${ACTUAL_ROSETTA}"
           echo "Expected range: ${{ matrix.rosetta }}"
           node -e "process.exit(Number(!require('semver').satisfies('${ACTUAL_ROSETTA}', '${{ matrix.rosetta }}')))"
