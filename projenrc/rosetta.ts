@@ -46,6 +46,7 @@ export class RosettaPeerDependency extends Component {
         NODE_OPTIONS: '--max_old_space_size=4096',
       },
       strategy: {
+        failFast: false,
         matrix: {
           domain: {
             rosetta: [
