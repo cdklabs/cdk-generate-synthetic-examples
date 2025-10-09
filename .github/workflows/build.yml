@@ -103,7 +103,11 @@ jobs:
           npx projen compile
           npx projen test
       - name: Check Rosetta version
-        run: node -e "process.exit(Number(!require('semver').satisfies('$(npx ${JSII_ROSETTA} --version)', '${{ matrix.rosetta }}')))"
+        run: |-
+          ACTUAL_ROSETTA=$(npx ${JSII_ROSETTA} --version)
+          echo "Actual version: ${ACTUAL_ROSETTA}"
+          echo "Expected range: ${{ matrix.rosetta }}"
+          node -e "process.exit(Number(!require('semver').satisfies('${ACTUAL_ROSETTA}', '${{ matrix.rosetta }}')))"
     strategy:
       fail-fast: false
       matrix:
