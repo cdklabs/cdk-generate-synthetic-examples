@@ -48,7 +48,10 @@ export class RosettaPeerDependency extends Component {
       strategy: {
         matrix: {
           domain: {
-            rosetta: this.calculateMinimalVersions(options.supportedVersions),
+            rosetta: [
+              ...Object.values(options.supportedVersions).filter((v) => v !== false),
+              ...this.calculateMinimalVersions(options.supportedVersions),
+            ],
           },
         },
       },
