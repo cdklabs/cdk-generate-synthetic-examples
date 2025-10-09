@@ -2,12 +2,13 @@
 import * as child_process from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { replaceAssembly } from '@jsii/spec';
+import { JsiiFeature, replaceAssembly } from '@jsii/spec';
 import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
 import { insertExample, addFixtureToRosetta } from './assemblies';
 import { generateExample } from './generate';
 
 export const FIXTURE_NAME = '_generated';
+export const ASSEMBLY_FEATURES: JsiiFeature[] = ['intersection-types'];
 
 export interface ExtractOptions {
   readonly cache?: string;
@@ -27,7 +28,7 @@ export async function generateMissingExamples(assemblyLocations: string[], optio
       throw new Error(`Assembly location not a directory: ${assemblyLocation}`);
     }
 
-    return { assemblyLocation, assembly: await typesystem.load(assemblyLocation, { validate: false }) };
+    return { assemblyLocation, assembly: await typesystem.load(assemblyLocation, { validate: false, supportedFeatures: ASSEMBLY_FEATURES }) };
   }));
 
   loadedAssemblies.flatMap(({ assembly, assemblyLocation }) => {
