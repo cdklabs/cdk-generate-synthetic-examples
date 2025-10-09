@@ -103,7 +103,7 @@ jobs:
           npx projen compile
           npx projen test
       - name: Check Rosetta version
-        run: test $(npx jsii-rosetta --version) = "${{ matrix.rosetta }}"
+        run: node -e "process.exit(Number(!require('semver').satisfies('$(npx ${JSII_ROSETTA} --version)', '${{ matrix.rosetta }}')))"
     strategy:
       fail-fast: false
       matrix:
