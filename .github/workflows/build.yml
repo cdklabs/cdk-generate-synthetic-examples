@@ -105,6 +105,7 @@ jobs:
       - name: Check Rosetta version
         run: test $(npx jsii-rosetta --version) = "${{ matrix.rosetta }}"
     strategy:
+      fail-fast: false
       matrix:
         rosetta:
           - ^1.85.0
