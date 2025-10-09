@@ -88,7 +88,7 @@ export class RosettaPeerDependency extends Component {
         // Check that the actually installed version matches the requested version (we don't trust yarn apparently)
         name: 'Check Rosetta version',
         run: [
-          'ACTUAL_ROSETTA=$(npx ${JSII_ROSETTA} --version)',
+          `ACTUAL_ROSETTA=$(npx ${JSII_ROSETTA} --version)`,
           'echo "Actual version: ${ACTUAL_ROSETTA}"',
           'echo "Expected range: ${{ matrix.rosetta }}"',
           'node -e "process.exit(Number(!require(\'semver\').satisfies(\'${ACTUAL_ROSETTA}\', \'${{ matrix.rosetta }}\')))"',
