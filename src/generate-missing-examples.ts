@@ -8,7 +8,7 @@ import { insertExample, addFixtureToRosetta } from './assemblies';
 import { generateExample } from './generate';
 
 export const FIXTURE_NAME = '_generated';
-export const ASSEMBLY_FEATURES: JsiiFeature[] = ['intersection-types'];
+export const ASSEMBLY_FEATURES: JsiiFeature[] = ['intersection-types', 'class-covariant-overrides'];
 
 export interface ExtractOptions {
   readonly cache?: string;
