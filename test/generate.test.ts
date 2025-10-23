@@ -451,7 +451,7 @@ function expectedDocTest(testParams: DocTest) {
     );
     try {
       const ts = new reflect.TypeSystem();
-      await ts.load(assembly.directory, { supportedFeatures: ['intersection-types'] });
+      await ts.load(assembly.directory, { supportedFeatures: ['intersection-types', 'class-covariant-overrides'] });
 
       const type = ts.findFqn(`my_assembly.${testParams.typeName}`);
       if (!type.isClassType() && !type.isInterfaceType()) {
