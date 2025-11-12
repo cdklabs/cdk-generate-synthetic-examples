@@ -172,7 +172,7 @@ test('test end-to-end and translation to Python with compressed assembly', async
   }
 });
 
-test('test nested submodule dependency import', async () => {
+test('test deeply nested submodule imports', async () => {
   const assembly = await AssemblyFixture.fromSource(
     {
       'index.ts': `
@@ -216,8 +216,64 @@ test('test nested submodule dependency import', async () => {
       const snippet = tablet.tryGetSnippet(snippetKey);
       const js = snippet?.originalSource.source;
       const python = snippet?.get(TargetLanguage.PYTHON)?.source;
-      expect(js).toContain("import { interfaces } from 'my_assembly/nested';");
-      expect(python).toContain('from example_test_demo.nested import interfaces');
+      expect(js).toContain("import { interfaces as nested_interfaces } from 'my_assembly/nested';");
+      expect(python).toContain('from example_test_demo.nested import interfaces as nested_interfaces');
+    }
+    expect(tablet.snippetKeys.length).toBe(2);
+  } finally {
+    await assembly.cleanup();
+  }
+});
+
+test('can import multiple nested submodules of the same name', async () => {
+  const assembly = await AssemblyFixture.fromSource(
+    {
+      'index.ts': `
+      export * as interfaces from './interfaces';
+      export * as aws_s3 from './aws-s3';
+      `,
+      'interfaces/index.ts': `
+      export * as aws_s3 from './aws-s3';
+      `,
+      'interfaces/aws-s3.ts': `
+      export interface MyClassProps {
+        readonly someProps: MyClassProps;
+      }
+    `,
+      'aws-s3/index.ts': `
+      import { MyClassProps } from '../interfaces/aws-s3';
+
+      export class MyClass {
+        constructor(value: string, props: MyClassProps) {
+          Array.isArray(value);
+          Array.isArray(props);
+        }
+      }
+    `,
+    },
+    {
+      name: 'my_assembly',
+      jsii: DUMMY_ASSEMBLY_TARGETS,
+      jsiiRosetta: DUMMY_ASSEMBLY_DEPS,
+    },
+  );
+  try {
+    const outputTablet = path.join(assembly.directory, 'test.tbl.json');
+
+    await generateMissingExamples([assembly.directory], {
+      extractOptions: {
+        cache: outputTablet,
+      },
+    });
+
+    const tablet = await LanguageTablet.fromFile(outputTablet);
+
+    for (const snippetKey of tablet.snippetKeys) {
+      const snippet = tablet.tryGetSnippet(snippetKey);
+      const js = snippet?.originalSource.source;
+      const python = snippet?.get(TargetLanguage.PYTHON)?.source;
+      expect(js).toContain("import { aws_s3 as interfaces_aws_s3 } from 'my_assembly/interfaces';");
+      expect(python).toContain('from example_test_demo.interfaces import aws_s3 as interfaces_aws_s3');
     }
     expect(tablet.snippetKeys.length).toBe(2);
   } finally {

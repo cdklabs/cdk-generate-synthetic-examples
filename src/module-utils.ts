@@ -50,7 +50,7 @@ export function module(type: reflect.Type): ImportedModule {
 
     // we use a special name or the final submodule name as name
     // asm.a.b.c.d => d
-    const importName = SPECIAL_NAMESPACE_IMPORT_NAMES[specialNameKey] ?? parts.submoduleNameParts.at(-1);
+    const importName = SPECIAL_NAMESPACE_IMPORT_NAMES[specialNameKey] ?? parts.submoduleNameParts.join('.');
 
     return {
       // we always import the sub module
