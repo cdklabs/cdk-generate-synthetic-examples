@@ -171,3 +171,56 @@ test('test end-to-end and translation to Python with compressed assembly', async
     await assembly.cleanup();
   }
 });
+
+test('test nested submodule dependency import', async () => {
+  const assembly = await AssemblyFixture.fromSource(
+    {
+      'index.ts': `
+      export * as nested from './nested';
+      `,
+      'nested/index.ts': `
+      export * as interfaces from './interfaces';
+      `,
+      'nested/interfaces/index.ts': `
+      export interface MyClassProps {
+        readonly someString: string;
+        readonly someNumber: number;
+      }
+
+      export class MyClass {
+        constructor(value: string, props: MyClassProps) {
+          Array.isArray(value);
+          Array.isArray(props);
+        }
+      }
+    `,
+    },
+    {
+      name: 'my_assembly',
+      jsii: DUMMY_ASSEMBLY_TARGETS,
+      jsiiRosetta: DUMMY_ASSEMBLY_DEPS,
+    },
+  );
+  try {
+    const outputTablet = path.join(assembly.directory, 'test.tbl.json');
+
+    await generateMissingExamples([assembly.directory], {
+      extractOptions: {
+        cache: outputTablet,
+      },
+    });
+
+    const tablet = await LanguageTablet.fromFile(outputTablet);
+
+    for (const snippetKey of tablet.snippetKeys) {
+      const snippet = tablet.tryGetSnippet(snippetKey);
+      const js = snippet?.originalSource.source;
+      const python = snippet?.get(TargetLanguage.PYTHON)?.source;
+      expect(js).toContain("import { interfaces } from 'my_assembly/nested';");
+      expect(python).toContain('from example_test_demo.nested import interfaces');
+    }
+    expect(tablet.snippetKeys.length).toBe(2);
+  } finally {
+    await assembly.cleanup();
+  }
+});

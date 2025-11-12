@@ -20,8 +20,20 @@ const SPECIAL_NAMESPACE_IMPORT_NAMES: Record<string, string> = {
 };
 
 interface ImportedModule {
-  readonly importName: string;
+  /**
+   * The JS module to import from
+   */
   readonly moduleName: string;
+
+  /**
+   * The name to import as
+   */
+  readonly importName: string;
+
+  /**
+   * The submodule that's imported.
+   * Always the last part of th fqn (excl. type name)
+   */
   readonly submoduleName?: string;
 }
 
@@ -36,11 +48,19 @@ export function module(type: reflect.Type): ImportedModule {
   if (parts.submoduleNameParts.length > 0) {
     const specialNameKey = [parts.assemblyName, ...parts.submoduleNameParts].join('.');
 
-    const importName = SPECIAL_NAMESPACE_IMPORT_NAMES[specialNameKey] ?? parts.submoduleNameParts.join('.');
+    // we use a special name or the final submodule name as name
+    // asm.a.b.c.d => d
+    const importName = SPECIAL_NAMESPACE_IMPORT_NAMES[specialNameKey] ?? parts.submoduleNameParts.at(-1);
+
     return {
+      // we always import the sub module
+      // asm.a.b.c.d => asm/a/b/c
+      moduleName: [parts.assemblyName, ...parts.submoduleNameParts.slice(0, -1)].join('/'),
+      // ensure this is a valid identifier
       importName: escapeIdentifier(importName.replace(/^aws_/g, '').replace(/[^a-z0-9_]/g, '_')),
-      moduleName: parts.assemblyName,
-      submoduleName: parts.submoduleNameParts.join('.'),
+      // the last part of the fqn
+      // asm.a.b.c.d => d
+      submoduleName: parts.submoduleNameParts.at(-1),
     };
   }
 
@@ -107,9 +127,9 @@ function analyzeTypeName(type: reflect.Type): TypeNameParts {
   }
 
   return {
-    assemblyName: type.assembly.name,
-    submoduleNameParts: nsParts.slice(1, split),
-    namespaceNameParts: nsParts.slice(split, nsParts.length),
-    simpleName: type.name,
+    assemblyName: type.assembly.name, // asm
+    submoduleNameParts: nsParts.slice(1, split), // ['b', 'c', 'd']
+    namespaceNameParts: nsParts.slice(split, nsParts.length), // []
+    simpleName: type.name, // Type
   };
 }
