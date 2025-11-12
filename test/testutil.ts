@@ -44,8 +44,9 @@ export class AssemblyFixture {
       jsiiRosetta: packageInfo.jsiiRosetta,
     }, null, 2));
     for (const [fileName, fileContents] of Object.entries(files)) {
-      // eslint-disable-next-line no-await-in-loop
-      fs.writeFileSync(path.join(modDir, fileName), fileContents);
+      const loc = path.join(modDir, fileName);
+      fs.mkdirSync(path.dirname(loc), { recursive: true });
+      fs.writeFileSync(loc, fileContents);
     }
 
     return new AssemblyFixture(modDir);
