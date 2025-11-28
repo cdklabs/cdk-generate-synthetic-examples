@@ -1,6 +1,5 @@
-import * as reflect from 'jsii-reflect';
-
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS, MultipleSources } from './testutil';
+import { DirTrackingTypeSystem } from '../src/dir-tracking-typesystem';
 import { generateExample, generateAssignmentStatement } from '../src/generate';
 
 describe('generateClassAssignment ', () => {
@@ -196,7 +195,7 @@ describe('generateClassAssignment ', () => {
       },
     );
 
-    const ts = new reflect.TypeSystem();
+    const ts = new DirTrackingTypeSystem();
     await ts.load(assembly.directory);
 
     const type = ts.findClass('my_assembly.ClassA');
@@ -220,7 +219,7 @@ describe('generateClassAssignment ', () => {
       },
     );
 
-    const ts = new reflect.TypeSystem();
+    const ts = new DirTrackingTypeSystem();
     await ts.load(assembly.directory);
 
     const type = ts.findClass('my_assembly.ClassA');
@@ -243,7 +242,7 @@ describe('generateClassAssignment ', () => {
       },
     );
 
-    const ts = new reflect.TypeSystem();
+    const ts = new DirTrackingTypeSystem();
     await ts.load(assembly.directory);
 
     const type = ts.findClass('my_assembly.ClassA');
@@ -356,7 +355,7 @@ test(
   }),
 );
 
-test('rendering types in namespaces', expectedDocTest({
+test('rendering types in classes', expectedDocTest({
   sources: {
     // This merges a class and a namespace (making the struct appear
     // namespaced inside the class -- we do this for L1 structs)
@@ -450,7 +449,7 @@ function expectedDocTest(testParams: DocTest) {
       },
     );
     try {
-      const ts = new reflect.TypeSystem();
+      const ts = new DirTrackingTypeSystem();
       await ts.load(assembly.directory, { supportedFeatures: ['intersection-types', 'class-covariant-overrides'] });
 
       const type = ts.findFqn(`my_assembly.${testParams.typeName}`);
