@@ -3,8 +3,8 @@ import * as reflect from 'jsii-reflect';
 import { TypeSystem } from 'jsii-reflect';
 
 import { Code } from './code';
-import { AnyAssumption, Assumption, Import, IntersectionAssumption } from './declaration';
-import { escapeIdentifier, typeReference } from './module-utils';
+import { AnyAssumption, Assumption, Import, IntersectionAssumption, typeReference } from './declaration';
+import { escapeIdentifier } from './module-utils';
 import { sortBy } from './utils';
 
 /**
@@ -271,7 +271,7 @@ function exampleValue(context: ExampleContext, typeRef: reflect.TypeReference, n
     const newType = context.typeSystem.findFqn(fqn);
 
     if (fqn in SPECIAL_TYPE_EXAMPLES) {
-      return new Code(SPECIAL_TYPE_EXAMPLES[fqn], [new Import(newType)]);
+      return new Code(SPECIAL_TYPE_EXAMPLES[fqn], [Import.forType(newType)]);
     }
 
     if (newType.isEnumType()) {
@@ -326,7 +326,7 @@ function intersectionExample(typeRefs: reflect.TypeReference[], context: Example
   const types = typeRefs.map((t) => context.typeSystem.findFqn((t as any).fqn));
   return new Code(variableName, [
     new IntersectionAssumption(types, variableName),
-    ...types.map((t) => new Import(t)),
+    ...types.map((t) => Import.forType(t)),
   ]);
 }
 
@@ -352,7 +352,7 @@ function addAssumedVariableDeclaration(type: reflect.Type, suffix = ''): Code {
     newType = guessConcreteType(type);
   }
   const variableName = escapeIdentifier(lowercaseFirstLetter(stripLeadingI(newType.name))) + suffix;
-  return new Code(variableName, [new Assumption(newType, variableName), new Import(newType)]);
+  return new Code(variableName, [new Assumption(newType, variableName), Import.forType(newType)]);
 }
 
 /**

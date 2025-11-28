@@ -272,8 +272,8 @@ test('can import multiple nested submodules of the same name', async () => {
       const snippet = tablet.tryGetSnippet(snippetKey);
       const js = snippet?.originalSource.source;
       const python = snippet?.get(TargetLanguage.PYTHON)?.source;
-      expect(js).toContain("import { aws_s3 as interfaces_aws_s3 } from 'my_assembly/interfaces';");
-      expect(python).toContain('from example_test_demo.interfaces import aws_s3 as interfaces_aws_s3');
+      expect(js).toContain("import { aws_s3 as interfaces_s3 } from 'my_assembly/interfaces';");
+      expect(python).toContain('from example_test_demo.interfaces import aws_s3 as interfaces_s3');
     }
     expect(tablet.snippetKeys.length).toBe(2);
   } finally {

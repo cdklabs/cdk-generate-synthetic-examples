@@ -21,6 +21,8 @@ const project = new CdklabsTypeScriptProject({
     'jest',
     'jsii',
     'typescript',
+    'aws-cdk-lib', // To run tests against
+    '@aws-cdk/mixins-preview@2.230.0-alpha.0', // To run tests against
   ],
   tsconfig: {
     compilerOptions: {
