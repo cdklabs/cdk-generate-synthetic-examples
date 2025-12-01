@@ -1,4 +1,4 @@
-import { sortBy } from '../lib/utils';
+import { sortBy } from '../src/utils';
 
 test('sortBy sorts successfully', () => {
   const alist = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

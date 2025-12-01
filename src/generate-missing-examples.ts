@@ -3,8 +3,9 @@ import * as child_process from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { JsiiFeature, replaceAssembly } from '@jsii/spec';
-import { Assembly, ClassType, InterfaceType, TypeSystem } from 'jsii-reflect';
+import { Assembly, ClassType, InterfaceType } from 'jsii-reflect';
 import { insertExample, addFixtureToRosetta } from './assemblies';
+import { DirTrackingTypeSystem } from './dir-tracking-typesystem';
 import { generateExample } from './generate';
 
 export const FIXTURE_NAME = '_generated';
@@ -20,7 +21,7 @@ export interface GenerateExamplesOptions {
 }
 
 export async function generateMissingExamples(assemblyLocations: string[], options: GenerateExamplesOptions) {
-  const typesystem = new TypeSystem();
+  const typesystem = new DirTrackingTypeSystem();
 
   // load all assemblies into typesystem
   const loadedAssemblies = await Promise.all(assemblyLocations.map(async (assemblyLocation) => {

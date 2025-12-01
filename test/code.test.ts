@@ -1,5 +1,5 @@
-import { Code } from '../lib/code';
-import { AnyAssumption } from '../lib/declaration';
+import { Code } from '../src/code';
+import { AnyAssumption } from '../src/declaration';
 
 test('created successfully', () => {
   const code = new Code('hello world', [new AnyAssumption('from Mars')]);

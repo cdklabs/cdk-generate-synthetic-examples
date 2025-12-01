@@ -1,7 +1,7 @@
 import * as reflect from 'jsii-reflect';
-
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS } from './testutil';
-import { module } from '../lib/module-utils';
+import { DirTrackingTypeSystem } from '../src/dir-tracking-typesystem';
+import { typeAccess } from '../src/module-utils';
 
 describe('v1 names are correct: ', () => {
   test('core', async () => {
@@ -132,7 +132,7 @@ async function v1BuildAssemblyHelper(name: string) {
     },
   );
 
-  const ts = new reflect.TypeSystem();
+  const ts = new DirTrackingTypeSystem();
   await ts.load(assembly.directory);
   return { ts, assembly };
 }
@@ -155,7 +155,38 @@ async function v2BuildAssemblyHelper(name: string) {
     },
   );
 
-  const ts = new reflect.TypeSystem();
+  const ts = new DirTrackingTypeSystem();
   await ts.load(assembly.directory);
   return { ts, assembly };
+}
+
+/**
+ * Backwards compatible API for old test
+ */
+function module(t: reflect.Type): ImportedModule {
+  const access = typeAccess(t);
+
+  return {
+    moduleName: access.importSource,
+    importName: access.targetSymbol,
+    submoduleName: access.sourceSymbol !== '*' ? access.sourceSymbol : undefined,
+  };
+}
+
+interface ImportedModule {
+  /**
+   * The JS module to import from
+   */
+  readonly moduleName: string;
+
+  /**
+   * The name to import as
+   */
+  readonly importName: string;
+
+  /**
+   * The submodule that's imported.
+   * Always the last part of th fqn (excl. type name)
+   */
+  readonly submoduleName?: string;
 }
