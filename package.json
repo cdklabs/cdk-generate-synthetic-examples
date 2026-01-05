@@ -62,8 +62,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@jsii/spec": "^1.122.0",
-    "jsii-reflect": "^1.122.0",
+    "@jsii/spec": "^1.125.0",
+    "jsii-reflect": "^1.125.0",
     "yargs": "^17.7.2"
   },
   "main": "lib/index.js",
