@@ -233,7 +233,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=prod --filter=@jsii/spec,jsii-reflect,yargs"
+          "exec": "npx npm-check-updates@18 --upgrade --target=minor --peer --no-deprecated --dep=prod --filter=@jsii/spec,jsii-reflect,yargs"
         },
         {
           "exec": "yarn install --check-files"
@@ -257,7 +257,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=latest --peer --no-deprecated --dep=dev,peer,prod,optional --filter=cdklabs-projen-project-types,projen"
+          "exec": "npx npm-check-updates@18 --upgrade --target=latest --peer --no-deprecated --dep=dev,peer,prod,optional --filter=cdklabs-projen-project-types,projen"
         },
         {
           "exec": "yarn install --check-files"
@@ -281,7 +281,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev --filter=@types/jest,@types/semver,@types/yargs,aws-cdk-lib,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii,semver,ts-jest,ts-node,typescript"
+          "exec": "npx npm-check-updates@18 --upgrade --target=minor --peer --no-deprecated --dep=dev --filter=@types/jest,@types/semver,@types/yargs,aws-cdk-lib,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii,semver,ts-jest,ts-node,typescript"
         },
         {
           "exec": "yarn install --check-files"
