@@ -7,7 +7,7 @@ describe('with aws-cdk-lib', () => {
   let ts: DirTrackingTypeSystem;
   beforeEach(async () => {
     ts = new DirTrackingTypeSystem();
-    await ts.load('node_modules/aws-cdk-lib', { validate: false });
+    await ts.load('node_modules/aws-cdk-lib', { validate: false, supportedFeatures: ['intersection-types'] });
   });
 
   test('generate example for doubly nested type', () => {
@@ -21,7 +21,7 @@ describe('with @aws-cdk/mixins-preview', () => {
   let ts: DirTrackingTypeSystem;
   beforeEach(async () => {
     ts = new DirTrackingTypeSystem();
-    await ts.load('node_modules/@aws-cdk/mixins-preview', { validate: false });
+    await ts.load('node_modules/@aws-cdk/mixins-preview', { validate: false, supportedFeatures: ['intersection-types'] });
   });
 
   test('generate example alexa mixin', () => {
