@@ -306,6 +306,29 @@ describe('generateClassAssignment ', () => {
 });
 
 test(
+  'generate example for struct named Scope does not collide with fixture params',
+  expectedDocTest({
+    sources: {
+      'index.ts': `
+      export interface Scope {
+        readonly required: string;
+      }
+      `,
+    },
+    typeName: 'Scope',
+    // A variable named 'scope' would collide with the synthetic fixture's
+    // `constructor(scope, id)`, so it must be escaped to 'scope_'.
+    expected: [
+      'import * as my_assembly from \'my_assembly\';',
+      '',
+      'const scope_: my_assembly.Scope = {',
+      '  required: \'required\',',
+      '};',
+    ],
+  }),
+);
+
+test(
   'generate example for struct',
   expectedDocTest({
     sources: {
