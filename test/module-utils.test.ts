@@ -1,7 +1,26 @@
 import * as reflect from 'jsii-reflect';
 import { AssemblyFixture, DUMMY_ASSEMBLY_TARGETS } from './testutil';
 import { DirTrackingTypeSystem } from '../src/dir-tracking-typesystem';
-import { typeAccess } from '../src/module-utils';
+import { escapeIdentifier, typeAccess } from '../src/module-utils';
+
+describe('escapeIdentifier', () => {
+  test('escapes fixture-reserved identifiers so they cannot collide with the fixture constructor params', () => {
+    // The synthetic-example fixture renders the example inside
+    // `constructor(scope: Construct, id: string)`, so these must be escaped.
+    expect(escapeIdentifier('scope')).toEqual('scope_');
+    expect(escapeIdentifier('id')).toEqual('id_');
+  });
+
+  test('escapes reserved TypeScript keywords', () => {
+    expect(escapeIdentifier('function')).toEqual('function_');
+    expect(escapeIdentifier('default')).toEqual('default_');
+  });
+
+  test('leaves ordinary identifiers untouched', () => {
+    expect(escapeIdentifier('bucket')).toEqual('bucket');
+    expect(escapeIdentifier('scopeName')).toEqual('scopeName');
+  });
+});
 
 describe('v1 names are correct: ', () => {
   test('core', async () => {
