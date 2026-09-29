@@ -60,7 +60,7 @@ export function typeAccess(type: reflect.Type): TypeAccess {
   };
 }
 
-const KEYWORDS = ['function', 'default', 'arguments', 'enum'];
+const KEYWORDS = ['function', 'default', 'arguments', 'enum', 'public'];
 
 /**
  * Identifiers that are declared by the synthetic-example fixture.
@@ -76,7 +76,10 @@ const KEYWORDS = ['function', 'default', 'arguments', 'enum'];
 const FIXTURE_RESERVED_IDENTIFIERS = ['scope', 'id'];
 
 export function escapeIdentifier(ident: string): string {
-  return KEYWORDS.includes(ident) || FIXTURE_RESERVED_IDENTIFIERS.includes(ident) ? `${ident}_` : ident;
+  return KEYWORDS.includes(ident) ||
+    FIXTURE_RESERVED_IDENTIFIERS.includes(ident)
+    ? `${ident}_`
+    : ident;
 }
 
 /**
