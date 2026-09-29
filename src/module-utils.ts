@@ -60,16 +60,7 @@ export function typeAccess(type: reflect.Type): TypeAccess {
   };
 }
 
-const KEYWORDS = ['function', 'default', 'arguments', 'enum'];
-
-/**
- * Words that are reserved only in strict mode.
- *
- * rosetta compiles examples in strict mode, where these cannot be used as
- * variable names. An `any`-typed property named `public` is emitted as
- * `declare const public: any;`, which fails with TS1213.
- */
-const STRICT_MODE_RESERVED_WORDS = ['public'];
+const KEYWORDS = ['function', 'default', 'arguments', 'enum', 'public'];
 
 /**
  * Identifiers that are declared by the synthetic-example fixture.
@@ -86,7 +77,6 @@ const FIXTURE_RESERVED_IDENTIFIERS = ['scope', 'id'];
 
 export function escapeIdentifier(ident: string): string {
   return KEYWORDS.includes(ident) ||
-    STRICT_MODE_RESERVED_WORDS.includes(ident) ||
     FIXTURE_RESERVED_IDENTIFIERS.includes(ident)
     ? `${ident}_`
     : ident;
