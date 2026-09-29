@@ -16,6 +16,10 @@ describe('escapeIdentifier', () => {
     expect(escapeIdentifier('default')).toEqual('default_');
   });
 
+  test('escapes public, which is reserved in strict mode', () => {
+    expect(escapeIdentifier('public')).toEqual('public_');
+  });
+
   test('leaves ordinary identifiers untouched', () => {
     expect(escapeIdentifier('bucket')).toEqual('bucket');
     expect(escapeIdentifier('scopeName')).toEqual('scopeName');

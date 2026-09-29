@@ -329,6 +329,31 @@ test(
 );
 
 test(
+  'generate example for any-typed property named with a strict-mode reserved word',
+  expectedDocTest({
+    sources: {
+      'index.ts': `
+      export interface TlsEncryptionConfiguration {
+        readonly public: any;
+      }
+      `,
+    },
+    typeName: 'TlsEncryptionConfiguration',
+    // `declare const public: any;` fails to compile under rosetta strict mode
+    // (TS1213), so the variable must be escaped. The property key stays as is.
+    expected: [
+      'import * as my_assembly from \'my_assembly\';',
+      '',
+      'declare const public_: any;',
+      '',
+      'const tlsEncryptionConfiguration: my_assembly.TlsEncryptionConfiguration = {',
+      '  public: public_,',
+      '};',
+    ],
+  }),
+);
+
+test(
   'generate example for struct',
   expectedDocTest({
     sources: {
