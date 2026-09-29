@@ -190,7 +190,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "NODE_OPTIONS=\"$NODE_OPTIONS $(node -e \" const { satisfies } = require('semver'); const v = require('jsii-rosetta/package.json').version; process.stdout.write(satisfies(v, '>=5.9.67') ? '--experimental-vm-modules' : '') \")\" jest --passWithNoTests --updateSnapshot",
+          "exec": "jest --passWithNoTests --updateSnapshot",
           "receiveArgs": true
         },
         {

@@ -52,20 +52,4 @@ new RosettaPeerDependency(project, {
   },
 });
 
-// jsii-rosetta 5.9.67+ loads the ESM-only `stream-json` v3 with a dynamic
-// `import()`, which jest only supports with --experimental-vm-modules. Older
-// rosetta versions must run without it: under the flag, 5.1.x fails to load
-// assemblies. So only set it when the installed rosetta needs it.
-const vmModulesIfNeeded = [
-  '$(node -e "',
-  "const { satisfies } = require('semver');",
-  "const v = require('jsii-rosetta/package.json').version;",
-  "process.stdout.write(satisfies(v, '>=5.9.67') ? '--experimental-vm-modules' : '')",
-  '")',
-].join(' ');
-project.tasks.tryFind('test')?.updateStep(0, {
-  exec: `NODE_OPTIONS="$NODE_OPTIONS ${vmModulesIfNeeded}" jest --passWithNoTests --updateSnapshot`,
-  receiveArgs: true,
-});
-
 project.synth();
