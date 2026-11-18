@@ -14,10 +14,12 @@ describe('escapeIdentifier', () => {
   test('escapes reserved TypeScript keywords', () => {
     expect(escapeIdentifier('function')).toEqual('function_');
     expect(escapeIdentifier('default')).toEqual('default_');
+    expect(escapeIdentifier('export')).toEqual('export_');
   });
 
-  test('escapes public, which is reserved in strict mode', () => {
+  test('escapes public and interface, which are reserved in strict mode', () => {
     expect(escapeIdentifier('public')).toEqual('public_');
+    expect(escapeIdentifier('interface')).toEqual('interface_');
   });
 
   test('leaves ordinary identifiers untouched', () => {

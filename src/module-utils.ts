@@ -60,7 +60,7 @@ export function typeAccess(type: reflect.Type): TypeAccess {
   };
 }
 
-const KEYWORDS = ['function', 'default', 'arguments', 'enum', 'public'];
+const KEYWORDS = ['function', 'default', 'arguments', 'enum', 'public', 'export', 'interface'];
 
 /**
  * Identifiers that are declared by the synthetic-example fixture.
