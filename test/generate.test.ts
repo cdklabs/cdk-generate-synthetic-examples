@@ -329,6 +329,50 @@ test(
 );
 
 test(
+  'generate example for struct named with a reserved word',
+  expectedDocTest({
+    sources: {
+      'index.ts': `
+      export interface Export {
+        readonly required: string;
+      }
+      `,
+    },
+    typeName: 'Export',
+    // 'export' is a reserved word, so `const export = ...` does not compile.
+    expected: [
+      'import * as my_assembly from \'my_assembly\';',
+      '',
+      'const export_: my_assembly.Export = {',
+      '  required: \'required\',',
+      '};',
+    ],
+  }),
+);
+
+test(
+  'generate example for struct named with a strict-mode reserved word',
+  expectedDocTest({
+    sources: {
+      'index.ts': `
+      export interface Interface {
+        readonly required: string;
+      }
+      `,
+    },
+    typeName: 'Interface',
+    // 'interface' is reserved in strict mode, which is how rosetta compiles examples.
+    expected: [
+      'import * as my_assembly from \'my_assembly\';',
+      '',
+      'const interface_: my_assembly.Interface = {',
+      '  required: \'required\',',
+      '};',
+    ],
+  }),
+);
+
+test(
   'generate example for any-typed property named with a strict-mode reserved word',
   expectedDocTest({
     sources: {
